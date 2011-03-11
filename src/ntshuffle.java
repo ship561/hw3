@@ -65,17 +65,21 @@ public class ntshuffle {
 		double k = rand.nextDouble();
 		String base = "";
 		String seq = "";
+		String tempseq="";
 		for (int i=0; i< len; i++) {
 			if(i==0) {
 				base=this.firstbase();
 			} else {
 				base=this.nextbase(base);
 			}
-			seq += base;
+			tempseq += base;
 			if (i%10000==0) {
 				System.out.println(i+1 + " seq.length= " + seq.length());
+				seq+=tempseq.substring(0,tempseq.length()-1);
+				tempseq=tempseq.substring(tempseq.length()-1);
 			}
 		}
+		seq+=tempseq;
 		return seq;
 	}
 }
