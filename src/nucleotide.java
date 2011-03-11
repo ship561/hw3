@@ -10,12 +10,18 @@ import java.util.regex.Pattern;
 
 public class nucleotide {
 	String seq;
-	double[] mono; //A,C,G,T
-	double[][] di;
+	int[] mono; //A,C,G,T
+	int[][] di;
 	
 	nucleotide() {
-		mono 	= new double[4];
-		di 		= new double[4][4];
+		mono 	= new int[4];
+		di 		= new int[4][4];
+	}
+	
+	nucleotide(String s) {
+		seq		= s;
+		mono 	= new int[4];
+		di 		= new int[4][4];
 	}
 	
     String fileIN(File f) {           //reads file in
@@ -58,7 +64,7 @@ public class nucleotide {
     
     void monofreq(int from, int to) {
     	String sequence = this.seq.substring(from,to);
-    	this.mono 	= new double[4];
+    	this.mono 	= new int[4];
     	for(int i=0; i< sequence.length(); i++) {
     		this.mono[findnuc(sequence.substring(i,i+1))]++;
     	}
@@ -66,7 +72,7 @@ public class nucleotide {
     
     void difreq(int from, int to) {
     	String sequence = this.seq.substring(from,to);
-    	this.di 		= new double[4][4];
+    	this.di 		= new int[4][4];
     	for(int i=0; i< sequence.length()-1; i++) {
     		this.di[findnuc(sequence.substring(i,i+1))][findnuc(sequence.substring(i+1,i+2))]++;
     	}
@@ -76,11 +82,26 @@ public class nucleotide {
     	return this.di[1][2]/(this.mono[1]*this.mono[2]);
     }
     
+    void print() {
+    	for (int i=0; i < this.mono.length; i++ ) {
+    		System.out.println(this.mono[i]);
+    	}
+    	for(int i=0; i<4; i++) {
+    		int sum = 0;
+    		for(int j=0; j<4; j++ ){
+    			sum += this.di[i][j];
+    			System.out.print(this.di[i][j] + " ");
+    		}
+    		System.out.println(sum);
+    	}
+    	  
+    }
+    
     public static void main(String[] args) {
     	nucleotide pylori = new nucleotide();
     	File file=new File(args[0]);
     	pylori.seq=pylori.fileIN(file);
-    	File outfile = new File("/Users/meyerlab/Desktop/cpg2.txt");
+     /*	File outfile = new File("/Users/meyerlab/Desktop/cpg2.txt");
     	
     	FileWriter outFile = null;
     	PrintWriter out=null;
@@ -102,29 +123,22 @@ public class nucleotide {
 	    		}
 	    	}
 	   	} catch (IOException e) {
-				// TODO Auto-generated catch block
-	   			System.out.println("failed out of " + pylori.seq.length());
 				e.printStackTrace();
 		} finally {
 			System.out.println(n + " " + pylori.seq.substring(n,n+500));
 			out.close();
 		}
-    	
-   /*
+    	*/
+  
     	pylori.monofreq(0, pylori.seq.length());
     	pylori.difreq(0, pylori.seq.length());
-    	for (int i=0; i < pylori.mono.length; i++ ) {
-    		System.out.println(pylori.mono[i]);
-    	}
-    	for(int i=0; i<4; i++) {
-    		int sum = 0;
-    		for(int j=0; j<4; j++ ){
-    			sum += pylori.di[i][j];
-    			System.out.print(pylori.di[i][j] + " ");
-    		}
-    		System.out.println(sum);
-    	}
-    	 */ 	
+    	pylori.print();
+    	ntshuffle newseq = new ntshuffle(pylori.di);
+    	nucleotide randomseq = new nucleotide(newseq.randomseq(pylori.seq.length()));
+    	randomseq.monofreq(0, randomseq.seq.length());
+    	randomseq.difreq(0, randomseq.seq.length());
+    	randomseq.print();
+    	System.out.println(pylori.seq.length() + " " + randomseq.seq.length());
     }
 
 }
