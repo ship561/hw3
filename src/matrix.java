@@ -139,7 +139,7 @@ public class matrix {
             	   m.stochastic = true;
                }
                
-               int n=1;
+               int n=2;
                do {
 	               ans=m.power(P, n);
 	               m.aperiodicity.put(n,ans);
