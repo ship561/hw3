@@ -128,10 +128,10 @@ public class matrix {
 		double[][] ans = new double[3][3];
 		matrix m = new matrix();
 		//double[][] P = { {0,1,0},{1,0,0},{0,0,1} };					//a
-		//double[][] P = { {.5,.5,0}, {0,.5,.5}, {.5,0,.5} };			//b
+		double[][] P = { {.5,.5,0}, {0,.5,.5}, {.5,0,.5} };			//b
 		//double[][] P = { { .5,0,.5}, {.25,.25,.5}, {.25,.75,0} };		//c
 		//double[][] P = { { .5,0,.5}, {.9,0,.1}, {.25,.75,0} };		//d
-		double[][] P = { {.5,0,.25}, {.25,.25,.25}, {.25,.75,0} };	//e
+		//double[][] P = { {.5,0,.25}, {.25,.25,.25}, {.25,.75,0} };	//e
 		
 		
 		
@@ -149,7 +149,7 @@ public class matrix {
 			ans=m.power(P, n);
 			m.aperiodicity.put(n,ans);
 			n++;
-		} while(m.aperiodicity.get(n-1)!=m.aperiodicity.get(n-2) && n <= m.limit);	//ends if limit is hit or stationary state is hit
+		} while(!Arrays.deepEquals(m.aperiodicity.get(n-1),m.aperiodicity.get(n-2)) && n <= m.limit);	//ends if limit is hit or stationary state is hit
 
 		n--;
 		m.periods = new int[n];
@@ -164,7 +164,7 @@ public class matrix {
 			}
 		}
 		int gcd = m.gcd();
-		if(gcd == 1) {
+		if(gcd <= 1) {
 			m.aperiod=true;
 		}
 		m.irregularity();
