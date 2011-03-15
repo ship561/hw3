@@ -112,8 +112,9 @@ public class ntshuffle {
 
 	boolean DFS(graph g, node n, String last) {
 		node next = n.nextnode();
+		String current = n.base;
 		boolean state=false;
-		if (n.base == last) {
+		if (n.base.equals(last)) {
 			return true;
 		} else {
 			if(next == null)
@@ -130,7 +131,7 @@ public class ntshuffle {
 		String firstbase = seq.substring(0,1);
 		node n = new node(lastbase);
 		boolean state = false;
-		for(int i=0; i<seq.length()-1; i++) {		//adding all the dinucleotides to a linked list in a hash table k=base, v=linked list of proceeding base
+		for(int i=0; i<seq.length()-1; i++) {		//adding all the dinucleotides to a linked list in a hash table k=base, v=linked list of proceeding bases
 			String curbase = seq.substring(i,i+1);
 			try {
 				baseArr.get(curbase).add(seq.substring(i+1,i+2));
@@ -145,22 +146,29 @@ public class ntshuffle {
 			node[] verticies=null;
 			G.insertvertex(n);
 			for (Enumeration<String> e = baseArr.keys(); e.hasMoreElements();){
-				String k = e.nextElement();
-				if(! k.equals(lastbase)){
-					String randBase = pickrandom(baseArr.get(k));
-					n = new node(randBase);
-					verticies = G.verticies();
-					for (int i=0; i<verticies.length; i++) {
-						if(! verticies[i].base.equals(n.base)) {
+				String k = e.nextElement();							//A, C, G, T is key pointing to a list of proceeding bases
+				if(! k.equals(lastbase)){							//can't choose random base from last base
+					String randBase = pickrandom(baseArr.get(k));	//random base from list
+					n = new node(randBase);							//new base to insert into graph
+					//verticies = G.verticies();
+						if(! G.contains(randBase)) {
 							G.insertvertex(n);
-							G.insertedge(verticies[i], n);
-						}
-					}
+						}	
 
+							if(G.find(k)==null) {
+								node v = new node(k);
+								G.insertvertex(v);
+							}
+							if(G.find(n.base)!=null) {
+								n=G.find(n.base);
+							}
+							G.insertedge(G.find(k), n);
 				}
 			}
-			for (int i=0; i<verticies.length; i++) {
+			verticies = G.verticies();
+			for (int i=0; i<G.size(); i++) {
 				if(DFS(G,verticies[i],lastbase)==false) {
+					state = false;
 					break;
 				} else {
 					state=true;
