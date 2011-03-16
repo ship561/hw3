@@ -197,7 +197,7 @@ public class ntshuffle {
 		return newseq;
 	}
 	
-	String trinucleotideshuffle(String seq) {
+	String trilonshuffle(String seq) {
 		char[] seqArr = seq.toCharArray();
 		Hashtable<String,LinkedList> baseArr = new Hashtable<String,LinkedList>();
 		
@@ -229,6 +229,78 @@ public class ntshuffle {
 		}
 		newseq += temp;
 		newseq = newseq.toUpperCase();
+		return newseq;
+	}
+	
+	String trinucleotideshuffle(String seq) {
+		Hashtable<String, LinkedList<String>> baseArr = new Hashtable<String, LinkedList<String>>();
+		String lastbase = seq.substring(seq.length()-2);
+		String firstbase = seq.substring(0,2);
+		
+		boolean state = false;
+		
+		for(int i=0; i<seq.length()-2; i++) {		//adding all the dinucleotides to a linked list in a hash table k=base, v=linked list of proceeding bases
+			String curbase = seq.substring(i,i+2);
+			try {
+				baseArr.get(curbase).add(seq.substring(i+1,i+3));
+			} catch (NullPointerException e) {
+				LinkedList l = new LinkedList();
+				baseArr.put(curbase,l);
+				baseArr.get(curbase).add(seq.substring(i+1,i+3));
+			}
+		}
+		while(state ==false) {
+			graph G = new graph();
+			node[] verticies=null;
+			node n = new node(lastbase);
+			G.insertvertex(n);
+			for (Enumeration<String> e = baseArr.keys(); e.hasMoreElements();){
+				String k = e.nextElement();							//A, C, G, T is key pointing to a list of proceeding bases
+				if(! k.equals(lastbase)){							//can't choose random base from last base
+					String randBase = pickrandom(baseArr.get(k));	//random base from list
+					n = new node(randBase);							//new base to insert into graph
+					//verticies = G.verticies();
+					if(! G.contains(randBase)) {
+						G.insertvertex(n);
+					}	
+
+					if(G.find(k)==null) {
+						node v = new node(k);
+						G.insertvertex(v);
+					}
+					if(G.find(n.base)!=null) {
+						n=G.find(n.base);
+					}
+					G.insertedge(G.find(k), n);
+				}
+			}
+			verticies = G.verticies();
+			for (int i=0; i<G.size(); i++) {
+				G.resetvisited();
+				if(DFS(G,verticies[i],lastbase)==false) {
+					state = false;
+					break;
+				} else {
+					state=true;
+				}
+			}
+
+			for (Enumeration<String> e = baseArr.keys(); e.hasMoreElements();){
+				String k = e.nextElement();
+				baseArr.put(k, shuffleList(baseArr.get(k)));
+			}
+		}
+		String newseq="";
+		String temp = firstbase;
+		for(int i=2; i<seq.length(); i++) {
+			String addbase = baseArr.get(temp.substring(i-2,i)).pop();
+			temp += addbase.substring(1);
+			if(i%10000==0) {
+				newseq += temp;
+			}
+		}
+		newseq += temp;
+		//newseq += lastbase;
 		return newseq;
 	}
 }

@@ -1,38 +1,50 @@
 import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 
 public class test {
 
-	/**
-	 * @param args
-	 */
+	Hashtable<String,Integer> h;
+	
+	test() {
+		h = new Hashtable();
+	}
+	
+	void trifreq(String seq) {
+		for(int i=0; i<seq.length()-3; i++) {
+			String s = seq.substring(i,i+3);
+			if(! h.containsKey(s)) {
+				h.put(s, 0);
+			} else {
+				int v = h.get(s);
+				v++;
+				h.put(s,v);
+			}
+		}
+		
+	}
 	public static void main(String[] args) {
 		ntshuffle nt = new ntshuffle();
-		String s = "GCTTTTAGGGGTGTTAGGGGTTTATCAAAAATCTAAAAACGCCCTTTCTTCTCAAGCAATTGTCGCTACGAGCATGAGCAATTTAGCCCTTAAAGAATACTTAAAATCCCAAGATTTAGAATTGAAGCATTGCGCGATTGGGGATAAGTTTGTGAGCGAATGCATGCAATTGAATAAAGCCAATTTTGGAGGCGAGCAAAGCGGGCATATCATTTTTAGCGATTACGCTAAAACAGGCGATGGTTTGGTGTGCGCTTTGCAAGTGAGCGCGTTAGTGTTAGAAAGCAAGCAAGTAAGCTCTGTTGCACTAAACCCCTTTGAATTATACCCCCAAAGCCTAATAAATTTGAATATCCAAAAAAAGCCTCCTTTAGAAAGCCTGAAAGGTTATAGCGCTCTTTTAAAGGAATTAGACAAGCTAGAAATCCGCCATTTGATCCGCTATAGCGGCACTGAAAACAAATTACGAATCCTCTTAGAAGCTAAAGATGAAAAACTTTTAGAATCCAAAATGCAAGAATTAAAAGAGTTTTTTGAAGGGCATTTGTGCTAAAAACCACCCAAAAAAGCCTGTTGATTTTTATAGTGGTTTTTTCCCTTATTTTTGGCACGGATCAAGCGATTAAATACGCTATTTTAGAGGGGTTTCGCTATGAAAGTTTGATTATAGATATTGTTTTAGTGTTCAATAAAGGCGTGGCGTTTTCCTTGCTCAGTTTTTTAGAGGGGGGTTTGAAATACTTGCAAATCCTTTTGATTTTAGGGCTTTTTATCTTTTTAATGTGCCAAAAGGAGCTT";
-		//String s = "AACAAT";
+		//String s = "GCTTTTAGGGGTGTTAGGGGTTTATCAAAAATCTAAAAACGCCCTTTCTTCTCAAGCAATTGTCGCTACGAGCATGAGCAATTTAGCCCTTAAAGAATACTTAAAATCCCAAGATTTAGAATTGAAGCATTGCGCGATTGGGGATAAGTTTGTGAGCGAATGCATGCAATTGAATAAAGCCAATTTTGGAGGCGAGCAAAGCGGGCATATCATTTTTAGCGATTACGCTAAAACAGGCGATGGTTTGGTGTGCGCTTTGCAAGTGAGCGCGTTAGTGTTAGAAAGCAAGCAAGTAAGCTCTGTTGCACTAAACCCCTTTGAATTATACCCCCAAAGCCTAATAAATTTGAATATCCAAAAAAAGCCTCCTTTAGAAAGCCTGAAAGGTTATAGCGCTCTTTTAAAGGAATTAGACAAGCTAGAAATCCGCCATTTGATCCGCTATAGCGGCACTGAAAACAAATTACGAATCCTCTTAGAAGCTAAAGATGAAAAACTTTTAGAATCCAAAATGCAAGAATTAAAAGAGTTTTTTGAAGGGCATTTGTGCTAAAAACCACCCAAAAAAGCCTGTTGATTTTTATAGTGGTTTTTTCCCTTATTTTTGGCACGGATCAAGCGATTAAATACGCTATTTTAGAGGGGTTTCGCTATGAAAGTTTGATTATAGATATTGTTTTAGTGTTCAATAAAGGCGTGGCGTTTTCCTTGCTCAGTTTTTTAGAGGGGGGTTTGAAATACTTGCAAATCCTTTTGATTTTAGGGCTTTTTATCTTTTTAATGTGCCAAAAGGAGCTT";
+		String s = "AGACATAAAGTTCCGTACTGCCGG";
 		for(int i=0; i<1000; i++) {
 			String ss = nt.dinucleotideshuffle(s);
 			String sss = nt.trinucleotideshuffle(s);
 			//System.out.println("double " + ss);
 			//System.out.println("triple " + sss);
 
-			nucleotide freq = new nucleotide();
-			freq.seq = s;
-			freq.monofreq(0, freq.seq.length());
-			freq.difreq(0, freq.seq.length());
-			nucleotide freqss = new nucleotide(ss);
-			freqss.seq = ss;
-			freqss.monofreq(0, freqss.seq.length());
-			freqss.difreq(0, freqss.seq.length());
-			nucleotide freqsss = new nucleotide(sss);
-			freqsss.seq = sss;
-			freqsss.monofreq(0, freqsss.seq.length());
-			freqsss.difreq(0, freqsss.seq.length());
-			
-			if (!Arrays.equals(freq.mono,freqss.mono) && !Arrays.equals(freqss.mono, freqsss.mono)) {
-				if(!Arrays.deepEquals(freq.di, freqss.di) && !Arrays.deepEquals(freqss.di, freqsss.di)) {
-					System.out.println(ss);
-				}
+			test freq = new test();
+			freq.trifreq(s);
+			test freqss = new test();
+			freqss.trifreq(ss);
+			test freqsss = new test();
+			freqsss.trifreq(sss);
+
+			for(Enumeration<String> e=freq.h.keys(); e.hasMoreElements();) {
+				String k = e.nextElement();
+				if(freq.h.get(e) != freqss.h.get(e) && freqss.h.get(e)!=freqsss.h.get(e))
+					System.out.println("error");
 			}
 			//System.out.println(ss);
 		}
