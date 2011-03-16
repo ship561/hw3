@@ -131,6 +131,7 @@ public class ntshuffle {
 		String firstbase = seq.substring(0,1);
 		node n = new node(lastbase);
 		boolean state = false;
+		
 		for(int i=0; i<seq.length()-1; i++) {		//adding all the dinucleotides to a linked list in a hash table k=base, v=linked list of proceeding bases
 			String curbase = seq.substring(i,i+1);
 			try {
@@ -190,6 +191,41 @@ public class ntshuffle {
 		}
 		newseq += temp;
 		//newseq += lastbase;
+		return newseq;
+	}
+	
+	String trinucleotideshuffle(String seq) {
+		char[] seqArr = seq.toCharArray();
+		Hashtable<String,LinkedList> baseArr = new Hashtable<String,LinkedList>();
+		
+		for(int i=2; i< seqArr.length; i=i+3) {
+			String s = Character.toString(seqArr[i]);
+			s=s.toLowerCase();
+			seqArr[i]=s.charAt(0);
+			String key = Character.toString(seqArr[i-2]) + Character.toString(seqArr[i]);
+			try {
+				baseArr.get(key).add(Character.toString(seqArr[i-1]));
+			} catch (NullPointerException e) {
+				LinkedList l = new LinkedList();
+				baseArr.put(key,l);
+				baseArr.get(key).add(Character.toString(seqArr[i-1]));
+			}
+			seqArr[i-1]=' ';
+		}
+		String truncseq = new String(seqArr);
+		truncseq = truncseq.replaceAll(" ", "");
+		truncseq = dinucleotideshuffle(truncseq);
+		String temp="";
+		String newseq = "";
+		for(int i=0; i<truncseq.length(); i=i+2) {
+			String key = truncseq.substring(i,i+2);
+			temp += key.substring(0,1) + baseArr.get(key).pop() + key.substring(1);
+			if(i%10000==0 && i!= 0) {
+				newseq += temp;
+			}
+		}
+		newseq += temp;
+		newseq = newseq.toUpperCase();
 		return newseq;
 	}
 }

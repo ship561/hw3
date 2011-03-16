@@ -24,6 +24,7 @@ public class node {
 		} else {
 			return (node) this.edge.get(next);
 		}
+		
 	}
 	
 	String getbase(node current) {
