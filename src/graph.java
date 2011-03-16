@@ -42,4 +42,11 @@ public class graph {
 	void insertedge(node v, node w) {
 		v.addedge(w);
 	}
+	
+	void resetvisited() {
+		node[] verticies = this.verticies();
+		for (int i=0; i<verticies.length; i++) {
+			verticies[i].visited=false;
+		}
+	}
 }

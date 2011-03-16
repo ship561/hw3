@@ -112,12 +112,13 @@ public class ntshuffle {
 
 	boolean DFS(graph g, node n, String last) {
 		node next = n.nextnode();
+		n.visited=true;
 		String current = n.base;
 		boolean state=false;
 		if (n.base.equals(last)) {
 			return true;
 		} else {
-			if(next == null)
+			if(next == null || next.visited==true)
 				return false;
 			else 
 				state = DFS(g,next,last);
@@ -129,7 +130,7 @@ public class ntshuffle {
 		Hashtable<String, LinkedList<String>> baseArr = new Hashtable<String, LinkedList<String>>();
 		String lastbase = seq.substring(seq.length()-1);
 		String firstbase = seq.substring(0,1);
-		node n = new node(lastbase);
+		
 		boolean state = false;
 		
 		for(int i=0; i<seq.length()-1; i++) {		//adding all the dinucleotides to a linked list in a hash table k=base, v=linked list of proceeding bases
@@ -145,6 +146,7 @@ public class ntshuffle {
 		while(state ==false) {
 			graph G = new graph();
 			node[] verticies=null;
+			node n = new node(lastbase);
 			G.insertvertex(n);
 			for (Enumeration<String> e = baseArr.keys(); e.hasMoreElements();){
 				String k = e.nextElement();							//A, C, G, T is key pointing to a list of proceeding bases
@@ -152,22 +154,23 @@ public class ntshuffle {
 					String randBase = pickrandom(baseArr.get(k));	//random base from list
 					n = new node(randBase);							//new base to insert into graph
 					//verticies = G.verticies();
-						if(! G.contains(randBase)) {
-							G.insertvertex(n);
-						}	
+					if(! G.contains(randBase)) {
+						G.insertvertex(n);
+					}	
 
-							if(G.find(k)==null) {
-								node v = new node(k);
-								G.insertvertex(v);
-							}
-							if(G.find(n.base)!=null) {
-								n=G.find(n.base);
-							}
-							G.insertedge(G.find(k), n);
+					if(G.find(k)==null) {
+						node v = new node(k);
+						G.insertvertex(v);
+					}
+					if(G.find(n.base)!=null) {
+						n=G.find(n.base);
+					}
+					G.insertedge(G.find(k), n);
 				}
 			}
 			verticies = G.verticies();
 			for (int i=0; i<G.size(); i++) {
+				G.resetvisited();
 				if(DFS(G,verticies[i],lastbase)==false) {
 					state = false;
 					break;
