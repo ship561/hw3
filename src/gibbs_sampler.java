@@ -9,7 +9,7 @@ class gibbs_sampler {
       String[] sequences;              //sequences S
       String[] sample;                 //list of Xi words taken starting at k start locations
       int wordlength;
-      Hashtable<String,double[]> prob_table;
+      Hashtable<String,double[]> prob_table;	//stores joint probabilities of Xi words
       int k_removed;
       //String Xk_removed;
       double pseudocount;

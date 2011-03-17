@@ -13,7 +13,7 @@ public class matrix {
 	Hashtable<Integer, double[][]> aperiodicity;
 	int[] periods;
 	boolean aperiod;
-	int limit = 100;
+	int limit = 1000;
 
 	matrix() {
 		//P=matrix;
@@ -130,8 +130,8 @@ public class matrix {
 		//double[][] P = { {0,1,0},{1,0,0},{0,0,1} };					//a
 		//double[][] P = { {.5,.5,0}, {0,.5,.5}, {.5,0,.5} };			//b
 		//double[][] P = { { .5,0,.5}, {.25,.25,.5}, {.25,.75,0} };		//c
-		double[][] P = { { .5,0,.5}, {.9,0,.1}, {.25,.75,0} };		//d
-		//double[][] P = { {.5,0,.25}, {.25,.25,.25}, {.25,.75,0} };	//e
+		//double[][] P = { { .5,0,.5}, {.9,0,.1}, {.25,.75,0} };		//d
+		double[][] P = { {.5,0,.25}, {.25,.25,.25}, {.25,.75,0} };	//e
 		
 		
 		

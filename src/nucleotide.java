@@ -101,7 +101,12 @@ public class nucleotide {
     	nucleotide pylori = new nucleotide();
     	File file=new File(args[0]);
     	pylori.seq=pylori.fileIN(file);
-     /*	File outfile = new File("/Users/meyerlab/Desktop/cpg2.txt");
+     /*********************************************************** 
+      * Section commented out for hw3_7b to figure out the cpg islands
+      * uncomment to run part b. comment out for normal use
+      ****************************************************************
+      
+      	File outfile = new File("/Users/meyerlab/Desktop/cpg2.txt");
     	
     	FileWriter outFile = null;
     	PrintWriter out=null;
@@ -128,15 +133,17 @@ public class nucleotide {
 			System.out.println(n + " " + pylori.seq.substring(n,n+500));
 			out.close();
 		}
-    	*/
+    	*************************************************************************/
   
     	pylori.monofreq(0, pylori.seq.length());
     	pylori.difreq(0, pylori.seq.length());
+    	System.out.println("H. pylori freqs");
     	pylori.print();
     	ntshuffle newseq = new ntshuffle(pylori.di);
     	nucleotide randomseq = new nucleotide(newseq.randomseq(pylori.seq.length()));
     	randomseq.monofreq(0, randomseq.seq.length());
     	randomseq.difreq(0, randomseq.seq.length());
+    	System.out.println("Random seq freq based on H. pylori freqs");
     	randomseq.print();
     	System.out.println(pylori.seq.length() + " " + randomseq.seq.length());
     }

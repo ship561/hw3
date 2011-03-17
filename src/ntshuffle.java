@@ -68,8 +68,8 @@ public class ntshuffle {
 		return bases[i+1];
 	}
 	String randomseq(int len) {
-		Random rand = new Random();
-		double k = rand.nextDouble();
+//		Random rand = new Random();
+//		double k = rand.nextDouble();
 		String base = "";
 		String seq = "";
 		String tempseq="";
@@ -80,11 +80,6 @@ public class ntshuffle {
 				base=this.nextbase(base);
 			}
 			tempseq += base;
-			if (i%10000==0) {
-				System.out.println(i+1 + " seq.length= " + seq.length());
-				seq+=tempseq.substring(0,tempseq.length()-1);
-				tempseq=tempseq.substring(tempseq.length()-1);
-			}
 		}
 		seq+=tempseq;
 		return seq;
